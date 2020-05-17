@@ -10,6 +10,7 @@
  
  *Resource:*
  + Sử dụng vector xml thay cho các file ảnh
+ + Sử dụng shrink resource để loại bỏ resource không cần thiết trong các thư viện
  
  ## Bài 3
 *Trường hợp newsfeed phức tạp, sẽ xử lý theo từng loại content:*

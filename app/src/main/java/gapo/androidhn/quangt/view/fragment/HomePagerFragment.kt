@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import gapo.androidhn.quangt.R
+import gapo.androidhn.quangt.utils.ARG_DOCUMENT_ID
 import gapo.androidhn.quangt.utils.LoadingState
 import gapo.androidhn.quangt.view.DetailActivity
 import gapo.androidhn.quangt.view.adapter.FeedAdapter
@@ -41,6 +42,30 @@ class HomePagerFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        initRecyclerView()
+        swipeRefresh.setOnRefreshListener {
+            pageViewModel.getNewsFeed(false)
+        }
+        pageViewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                LoadingState.Status.FAILED -> {
+                    pbLoading.visibility = View.GONE
+                    swipeRefresh.isRefreshing = false
+                    Toast.makeText(context, it.msg, Toast.LENGTH_SHORT).show()
+                }
+                LoadingState.Status.RUNNING -> pbLoading.visibility = View.VISIBLE
+                LoadingState.Status.SUCCESS -> {
+                    pbLoading.visibility = View.GONE
+                    swipeRefresh.isRefreshing = false
+                }
+            }
+        })
+        pageViewModel.data.observe(viewLifecycleOwner, Observer {
+            feedAdapter.update(it)
+        })
+    }
+
+    private fun initRecyclerView() {
         feedAdapter = FeedAdapter { feed, view ->
             gotoDetail(feed.document_id)
         }
@@ -52,25 +77,11 @@ class HomePagerFragment : Fragment() {
         )
         rvFeeds.addItemDecoration(decorator)
         rvFeeds.adapter = feedAdapter
-
-        pageViewModel.loadingState.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                LoadingState.Status.FAILED -> {
-                    pbLoading.visibility = View.GONE
-                    Toast.makeText(context, it.msg, Toast.LENGTH_SHORT).show()
-                }
-                LoadingState.Status.RUNNING -> pbLoading.visibility = View.VISIBLE
-                LoadingState.Status.SUCCESS -> pbLoading.visibility = View.GONE
-            }
-        })
-        pageViewModel.data.observe(viewLifecycleOwner, Observer {
-            feedAdapter.update(it)
-        })
     }
 
     private fun gotoDetail(documentId: String) {
         val intent = Intent(context, DetailActivity::class.java).apply {
-            putExtra("id", documentId)
+            putExtra(ARG_DOCUMENT_ID, documentId)
         }
         startActivity(intent)
     }

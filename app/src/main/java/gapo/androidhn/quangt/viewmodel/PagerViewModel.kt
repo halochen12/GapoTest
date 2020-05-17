@@ -24,15 +24,16 @@ class PagerViewModel(private val feedRepository: FeedRepository) : ViewModel() {
 
     init {
         data.value = feedRepository.feedData
-        getNewsFeed()
+        getNewsFeed(true)
     }
 
-    fun getNewsFeed() {
+    fun getNewsFeed(isFirst: Boolean) {
         viewModelScope.launch() {
             try {
                 loadingState.value = LoadingState.LOADING
                 data.value = feedRepository.getNewsFeed()
-                feedRepository.saveFeeds(data.value!!)
+                if (isFirst)
+                    feedRepository.saveFeeds(data.value!!)
                 loadingState.value = LoadingState.LOADED
             } catch (e: Exception) {
                 loadingState.value = LoadingState.error(e.message)

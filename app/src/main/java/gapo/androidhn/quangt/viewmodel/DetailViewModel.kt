@@ -15,7 +15,10 @@ class DetailViewModel(private val feedRepository: FeedRepository) : ViewModel() 
     //LiveData products
     var data = MutableLiveData<FeedDetail>()
 
-    fun getFeedDetail(documentId: Int) {
+    //DocumentId
+    var documentId: String? = ""
+
+    fun getFeedDetail() {
         viewModelScope.launch {
             try {
                 loadingState.value = LoadingState.LOADING

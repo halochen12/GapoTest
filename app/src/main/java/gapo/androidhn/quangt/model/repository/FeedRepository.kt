@@ -18,7 +18,7 @@ class FeedRepository(private val api: GapoApi, private val dao: FeedDao) {
         dao.add(list)
     }
 
-    suspend fun getDetail(documentId: Int): FeedDetail {
+    suspend fun getDetail(documentId: String?): FeedDetail {
         return api.getDetail(documentId)
     }
 }

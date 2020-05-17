@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import gapo.androidhn.quangt.R
+import gapo.androidhn.quangt.utils.ARG_DOCUMENT_ID
 import gapo.androidhn.quangt.utils.LoadingState
 import gapo.androidhn.quangt.view.adapter.DetailAdapter
 import gapo.androidhn.quangt.viewmodel.DetailViewModel
@@ -26,7 +27,11 @@ class DetailActivity : AppCompatActivity() {
             onBackPressed()
         }
         initRecyclerView()
-        detailViewModel.getFeedDetail(1)
+        swipeRefresh.setOnRefreshListener {
+            detailViewModel.getFeedDetail()
+        }
+        detailViewModel.documentId = intent.getStringExtra(ARG_DOCUMENT_ID)
+        detailViewModel.getFeedDetail()
         detailViewModel.data.observe(this, Observer {
             detailAdapter.update(it)
         })
@@ -34,15 +39,19 @@ class DetailActivity : AppCompatActivity() {
             when (it.status) {
                 LoadingState.Status.FAILED -> {
                     pbLoading.visibility = View.GONE
+                    swipeRefresh.isRefreshing = false
                     Toast.makeText(this, it.msg, Toast.LENGTH_SHORT).show()
                 }
                 LoadingState.Status.RUNNING -> pbLoading.visibility = View.VISIBLE
-                LoadingState.Status.SUCCESS -> pbLoading.visibility = View.GONE
+                LoadingState.Status.SUCCESS -> {
+                    pbLoading.visibility = View.GONE
+                    swipeRefresh.isRefreshing = false
+                }
             }
         })
     }
 
-    private fun initRecyclerView(){
+    private fun initRecyclerView() {
         detailAdapter = DetailAdapter { item, view ->
         }
         rvItems.layoutManager =

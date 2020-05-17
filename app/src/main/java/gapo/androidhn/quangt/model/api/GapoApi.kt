@@ -10,5 +10,5 @@ interface GapoApi {
     suspend fun getNewsFeed(): FeedResults
 
     @GET("detail.json")
-    suspend fun getDetail(@Query("documentId") documentId: Int): FeedDetail
+    suspend fun getDetail(@Query("documentId") documentId: String?): FeedDetail
 }

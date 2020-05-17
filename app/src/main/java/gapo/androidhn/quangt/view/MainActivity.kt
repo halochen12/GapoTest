@@ -10,6 +10,7 @@ import gapo.androidhn.quangt.R
 import gapo.androidhn.quangt.view.fragment.DashboardFragment
 import gapo.androidhn.quangt.view.fragment.HomeFragment
 import gapo.androidhn.quangt.view.fragment.NotificationsFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private var savedStateSparseArray =

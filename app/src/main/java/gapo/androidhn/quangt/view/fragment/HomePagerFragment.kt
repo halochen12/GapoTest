@@ -1,5 +1,6 @@
 package gapo.androidhn.quangt.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import gapo.androidhn.quangt.R
 import gapo.androidhn.quangt.utils.LoadingState
+import gapo.androidhn.quangt.view.DetailActivity
 import gapo.androidhn.quangt.view.adapter.FeedAdapter
 import gapo.androidhn.quangt.viewmodel.PagerViewModel
 import kotlinx.android.synthetic.main.fragment_home_pager.*
@@ -67,7 +69,10 @@ class HomePagerFragment : Fragment() {
     }
 
     private fun gotoDetail(documentId: String) {
-
+        val intent = Intent(context, DetailActivity::class.java).apply {
+            putExtra("id", documentId)
+        }
+        startActivity(intent)
     }
 
     companion object {

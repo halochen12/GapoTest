@@ -12,6 +12,7 @@ import gapo.androidhn.quangt.model.db.AppDatabase
 import gapo.androidhn.quangt.model.db.FeedDao
 import gapo.androidhn.quangt.model.repository.FeedRepository
 import gapo.androidhn.quangt.utils.BASE_URL
+import gapo.androidhn.quangt.viewmodel.DetailViewModel
 import gapo.androidhn.quangt.viewmodel.PagerViewModel
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -24,7 +25,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val viewModelModule = module {
-    viewModel { PagerViewModel(get()) }// với viewmodel thì mình dùng viewModel chứ không phải là single
+    viewModel { PagerViewModel(get()) }
+    viewModel { DetailViewModel(get()) }
 }
 
 val apiModule = module {

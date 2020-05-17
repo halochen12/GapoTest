@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.item_feed_video.view.*
 import tcking.github.com.giraffeplayer2.VideoView
 
 
-class FeedAdapter constructor(
+class FeedAdapter(
     private val onItemsSelected:
         (Feed, View) -> Unit
 ) : RecyclerView.Adapter<FeedAdapter.FeedVHolder>() {
@@ -106,33 +106,37 @@ class FeedAdapter constructor(
                 layoutPhotos.visibility = View.GONE
             else {
                 layoutPhotos.visibility = View.VISIBLE
-                if (feed.images.size == 1) {
-                    ivSingle.visibility = View.VISIBLE
-                    ivDoubleFirst.visibility = View.GONE
-                    ivDoubleLast.visibility = View.GONE
-                    ivTripleFirst.visibility = View.GONE
-                    ivTripleFirst.visibility = View.GONE
-                    ivTripleLast.visibility = View.GONE
-                    Glide.with(this).load(feed.images[0].href).into(ivSingle)
-                } else if (feed.images.size == 2) {
-                    ivSingle.visibility = View.GONE
-                    ivDoubleFirst.visibility = View.VISIBLE
-                    ivDoubleLast.visibility = View.VISIBLE
-                    ivTripleFirst.visibility = View.GONE
-                    ivTripleFirst.visibility = View.GONE
-                    ivTripleLast.visibility = View.GONE
-                    Glide.with(this).load(feed.images[0].href).into(ivDoubleFirst)
-                    Glide.with(this).load(feed.images[1].href).into(ivDoubleLast)
-                } else {
-                    ivSingle.visibility = View.GONE
-                    ivDoubleFirst.visibility = View.GONE
-                    ivDoubleLast.visibility = View.GONE
-                    ivTripleFirst.visibility = View.VISIBLE
-                    ivTripleFirst.visibility = View.VISIBLE
-                    ivTripleLast.visibility = View.VISIBLE
-                    Glide.with(this).load(feed.images[0].href).into(ivTripleFirst)
-                    Glide.with(this).load(feed.images[1].href).into(ivTripleSecond)
-                    Glide.with(this).load(feed.images[2].href).into(ivTripleLast)
+                when (feed.images.size) {
+                    1 -> {
+                        ivSingle.visibility = View.VISIBLE
+                        ivDoubleFirst.visibility = View.GONE
+                        ivDoubleLast.visibility = View.GONE
+                        ivTripleFirst.visibility = View.GONE
+                        ivTripleFirst.visibility = View.GONE
+                        ivTripleLast.visibility = View.GONE
+                        Glide.with(this).load(feed.images[0].href).into(ivSingle)
+                    }
+                    2 -> {
+                        ivSingle.visibility = View.GONE
+                        ivDoubleFirst.visibility = View.VISIBLE
+                        ivDoubleLast.visibility = View.VISIBLE
+                        ivTripleFirst.visibility = View.GONE
+                        ivTripleFirst.visibility = View.GONE
+                        ivTripleLast.visibility = View.GONE
+                        Glide.with(this).load(feed.images[0].href).into(ivDoubleFirst)
+                        Glide.with(this).load(feed.images[1].href).into(ivDoubleLast)
+                    }
+                    else -> {
+                        ivSingle.visibility = View.GONE
+                        ivDoubleFirst.visibility = View.GONE
+                        ivDoubleLast.visibility = View.GONE
+                        ivTripleFirst.visibility = View.VISIBLE
+                        ivTripleFirst.visibility = View.VISIBLE
+                        ivTripleLast.visibility = View.VISIBLE
+                        Glide.with(this).load(feed.images[0].href).into(ivTripleFirst)
+                        Glide.with(this).load(feed.images[1].href).into(ivTripleSecond)
+                        Glide.with(this).load(feed.images[2].href).into(ivTripleLast)
+                    }
                 }
             }
             setOnClickListener { listener(feed, itemView) }
@@ -150,6 +154,7 @@ class FeedAdapter constructor(
             videoPlayer.setVideoPath(feed.content?.href).setFingerprint(feed.hashCode())
             tvOrigin.text = feed.publisher.name
             tvTime.text = feed.published_date
+            setOnClickListener { listener(feed, itemView) }
         }
     }
 }

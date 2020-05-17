@@ -4,26 +4,21 @@ import gapo.androidhn.quangt.model.api.GapoApi
 import gapo.androidhn.quangt.model.db.FeedDao
 import gapo.androidhn.quangt.model.entity.Feed
 import gapo.androidhn.quangt.model.entity.FeedDetail
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class FeedRepository(private val api: GapoApi, private val dao: FeedDao) {
 
     var feedData = dao.findAll()
 
     suspend fun getNewsFeed(): List<Feed> {
-        val response = api.getNewsFeedAsync()
+        val response = api.getNewsFeed()
         return response.items
     }
 
-    suspend fun saveFeeds(list: List<Feed>) {
+    fun saveFeeds(list: List<Feed>) {
         dao.add(list)
     }
 
-    suspend fun getDetail(): FeedDetail {
-        return withContext(Dispatchers.IO) {
-            val response = api.getDetailAsync().await()
-            response
-        }
+    suspend fun getDetail(documentId: Int): FeedDetail {
+        return api.getDetail(documentId)
     }
 }

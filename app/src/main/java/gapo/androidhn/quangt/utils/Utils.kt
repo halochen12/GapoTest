@@ -14,3 +14,6 @@ val mapFeedType: HashMap<String, Int> = hashMapOf(
     "article" to TYPE_NEWS,
     "long_form" to TYPE_GALLERY
 )
+
+const val SECTION_TYPE_HEADER = 0
+const val SECTION_TYPE_VIDEO = 2
